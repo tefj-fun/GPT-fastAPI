@@ -56,9 +56,13 @@ detectButton.addEventListener('click', async () => {
     const results = data.images[0].results;
     console.log('Detection results:', results);
 
-    // Draw boxes if there are any detections
-    if (results && results.length > 0) {
-      results.forEach(result => {
+    // Filter only person detections
+    const personDetections = results.filter(result => result.name === 'person');
+    console.log('Person detections:', personDetections);
+
+    // Draw boxes if there are any person detections
+    if (personDetections && personDetections.length > 0) {
+      personDetections.forEach(result => {
         if (result.box) {
           const { x1, y1, x2, y2 } = result.box;
           const width = x2 - x1;
@@ -71,11 +75,11 @@ detectButton.addEventListener('click', async () => {
           ctx.stroke();
           ctx.font = "16px Arial";
           ctx.fillStyle = "red";
-          ctx.fillText(`${result.name} (${(result.confidence * 100).toFixed(1)}%)`, x1, y1 - 5);
+          ctx.fillText(`Person (${(result.confidence * 100).toFixed(1)}%)`, x1, y1 - 5);
         }
       });
     } else {
-      console.log('No objects detected in the image');
+      console.log('No persons detected in the image');
     }
   } catch (error) {
     console.error('Error during API call:', error);
